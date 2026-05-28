@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="北京众瑞信涂装设备有限公司推出的非接触式激光涂层测厚系统，型号CT100-R/CT100-B，测量范围1-1000um，精度2%，支持软件SDK与实时数据分析。提供非接触高精度测厚解决方案。">
+    <meta name="keywords" content="非接触涂层测厚仪,激光测厚系统,CT100-R,CT100-B,涂层厚度测量,北京众瑞信,测厚传感器">
+    <meta name="author" content="北京众瑞信涂装设备有限公司">
+    <meta name="robots" content="index, follow">
+    <title>北京众瑞信 | 非接触激光涂层测厚系统 CT100系列</title>
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter 现代字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #eef5ff 0%, #d9e9ff 100%);
+            color: #1a2c3e;
+            scroll-behavior: smooth;
+            line-height: 1.5;
+        }
+
+        /* 科技感光晕背景 */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(66, 153, 225, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 玻璃卡片 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 40px -16px rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 导航栏 */
+        .navbar {
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0b3b5f, #2c7da0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: #2c6280;
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #1e4a6e;
+            transition: color 0.2s;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover {
+            color: #0284c7;
+        }
+
+        /* 按钮 */
+        .btn-outline-light {
+            border: 1px solid #2c7da0;
+            background: transparent;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            color: #1e4a6e;
+            font-weight: 600;
+            transition: all 0.25s;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-outline-light:hover {
+            background: #2c7da0;
+            color: white;
+            border-color: #2c7da0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(100deg, #1e6f9f, #0f4c6b);
+            border: none;
+            color: white;
+            padding: 0.7rem 1.6rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            box-shadow: 0 5px 12px rgba(0, 80, 120, 0.2);
+            transition: all 0.25s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(100deg, #0f5b84, #0a3e57);
+            transform: scale(0.98);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero 区域 */
+        .hero {
+            padding: 3rem 0 2rem 0;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #0b3b5f, #1e88b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: #2c5a74;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #2c7da0;
+            padding-left: 1rem;
+        }
+
+        .model-badge {
+            display: flex;
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+
+        .badge {
+            background: rgba(44, 125, 160, 0.15);
+            border-radius: 40px;
+            padding: 0.3rem 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #075985;
+        }
+
+        .hero-img img {
+            width: 100%;
+            border-radius: 2rem;
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255,255,240,0.7);
+        }
+
+        /* 产品软件界面展示区 (模仿实时测量界面) */
+        .dashboard-preview {
+            background: #ffffffcc;
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+        }
+
+        .dashboard-title {
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0b3b5f;
+        }
+
+        .measure-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: space-between;
+        }
+
+        .thickness-card {
+            background: #eef3fc;
+            border-radius: 1.5rem;
+            padding: 1rem 1.6rem;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .thickness-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f4c6b;
+            font-family: monospace;
+        }
+
+        .mini-chart {
+            background: #f0f6fe;
+            border-radius: 1.2rem;
+            padding: 0.8rem;
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .chart-line {
+            display: flex;
+            align-items: flex-end;
+            height: 60px;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .bar {
+            background: #2c7da0;
+            width: 100%;
+            height: calc(30% + 10px);
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+
+        /* 图像双展示区 */
+        .image-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+        }
+
+        .img-card {
+            flex: 1;
+            background: rgba(255,255,245,0.5);
+            border-radius: 1.6rem;
+            padding: 1rem;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .img-card img {
+            width: 100%;
+            border-radius: 1.2rem;
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
+            border: 1px solid #bdd9ff;
+        }
+
+        /* 参数表格区 */
+        .spec-section {
+            margin: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0b3b5f;
+            border-left: 5px solid #2c7da0;
+            padding-left: 1rem;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,250,0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .compare-table th, .compare-table td {
+            padding: 1rem 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid #cbdde9;
+        }
+
+        .compare-table th {
+            background: #cbe5fe70;
+            font-weight: 700;
+            color: #0f4662;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .spec-common {
+            background: rgba(255, 255, 245, 0.7);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        /* 公司联系 */
+        .contact-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            justify-content: space-between;
+        }
+
+        .contact-info {
+            flex: 1.5;
+        }
+
+        .info-line {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .map-placeholder {
+            flex: 1;
+            background: #b9d9ff40;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid #b9d4ff;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #265c7a;
+        }
+
+        @media (max-width: 850px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar .nav-flex {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 0 20px;
+            }
+        }
+        .highlight {
+            background: linear-gradient(120deg, #e2f0ff, #cae3fc);
+            border-radius: 12px;
+            padding: 0.1rem 0.3rem;
+            font-weight: 600;
+        }
+        i.icon-blue {
+            color: #2c7da0;
+            width: 1.6rem;
+        }
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<!-- 导航栏 -->
+<div class="navbar">
+    <div class="container nav-flex">
+        <div class="logo">
+            <h1>ZRX <span style="font-weight:400">| 众瑞信</span></h1>
+            <p>非接触精密测厚 · 智造未来</p>
+        </div>
+        <div class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#product">产品概览</a>
+            <a href="#spec">技术规格</a>
+            <a href="#contact">联系</a>
+        </div>
+        <div>
+            <a href="tel:13910218971" class="btn-outline-light"><i class="fas fa-phone-alt"></i> 咨询专家</a>
+        </div>
+    </div>
+</div>
+
+<main>
+    <!-- Hero 区域 -->
+    <div class="container hero" id="home">
+        <div class="hero-grid">
+            <div>
+                <div class="model-badge">
+                    <span class="badge"><i class="fas fa-laser-pointer"></i> 非接触激光测厚</span>
+                    <span class="badge"><i class="fas fa-microchip"></i> CT100系列</span>
+                </div>
+                <div class="hero-title">
+                    精度微米级<br>非接触在线测厚系统
+                </div>
+                <div class="hero-sub">
+                    高精度2%测量值 | 工作距离灵活 | 实时数据反馈 | 提供SDK深度集成
+                </div>
+                <div class="model-badge">
+                    <span><i class="fas fa-chart-line"></i> 量程 1~1000μm</span>
+                    <span><i class="fas fa-tachometer-alt"></i> 典型0.5s快速测量</span>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <a href="#spec" class="btn-primary"><i class="fas fa-chart-simple"></i> 查看详细参数</a>
+                    <a href="mailto:xu.xiao@bjzrx.com" style="margin-left: 1rem;" class="btn-outline-light"><i class="fas fa-envelope"></i> 获取报价</a>
+                </div>
+            </div>
+            <div class="hero-img">
+                <!-- 主要产品软件界面模拟图 (实际上展示真实截图更佳) 由于product.png为软件截图，展示产品核心控制界面 -->
+                <img src="product.png" alt="非接触涂层测厚系统软件界面实时测量图" onerror="this.src='https://placehold.co/600x400/e3f0ff/2c7da0?text=CT100+Software+UI'; this.onerror=null;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 实时测量演示卡片（科技风格，模拟产品实时数据） -->
+    <div class="container">
+        <div class="dashboard-preview glass-card">
+            <div class="dashboard-title">
+                <i class="fas fa-waveform" style="color:#1e6f9f;"></i> 实时测量演示 · 动态反馈
+                <span style="font-size:0.8rem; background:#e0f0ff; padding:2px 8px; border-radius:30px;"><i class="fas fa-sync-alt"></i> 非接触激光在线</span>
+            </div>
+            <div class="measure-panel">
+                <div class="thickness-card">
+                    <div><i class="fas fa-ruler-combined"></i> 当前厚度</div>
+                    <div class="thickness-value" id="liveThickness">56.83</div>
+                    <div>μm</div>
+                    <small style="color:#287b9e;">单次测量成功 ✓</small>
+                </div>
+                <div class="thickness-card">
+                    <div><i class="fas fa-chart-line"></i> 平均厚度</div>
+                    <div class="thickness-value" id="avgThickness">78.0</div>
+                    <div>μm (连续5次)</div>
+                    <small>高稳定性</small>
+                </div>
+                <div class="mini-chart">
+                    <div><i class="fas fa-chart-scatter"></i> 厚度波动趋势 (Blue thickness over time)</div>
+                    <div class="chart-line" id="dynamicChart">
+                        <!-- 模拟5根柱状条 -->
+                        <div class="bar" style="height:32px;"></div>
+                        <div class="bar" style="height:48px;"></div>
+                        <div class="bar" style="height:42px;"></div>
+                        <div class="bar" style="height:55px;"></div>
+                        <div class="bar" style="height:38px;"></div>
+                        <div class="bar" style="height:45px;"></div>
+                    </div>
+                    <div class="mini-text" style="font-size:0.7rem; margin-top:8px;">Laser:-50°C / Shell:29.6°C (环境补偿)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 产品图片展示区 + 参数图 -->
+    <div class="container" id="product">
+        <div class="image-showcase">
+            <div class="img-card glass-card">
+                <i class="fas fa-desktop" style="font-size:1.8rem; color:#2c7da0;"></i>
+                <h3>智能测控软件</h3>
+                <img src="product.png" alt="测厚系统软件界面" style="max-height:260px; object-fit:cover;" onerror="this.src='https://placehold.co/500x300/dfefff/1e6f9f?text=Software+UI'">
+                <p style="margin-top:0.5rem;">实时厚度曲线 · 单次/连续模式 · 数据日志</p>
+            </div>
+            <div class="img-card glass-card">
+                <i class="fas fa-chart-bar" style="font-size:1.8rem; color:#2c7da0;"></i>
+                <h3>技术参数速览卡</h3>
+                <img src="product02.png" alt="CT100-R和CT100-B详细参数表" style="max-height:260px; object-fit:cover;" onerror="this.src='https://placehold.co/500x300/dfefff/1e6f9f?text=Parameter+Sheet'">
+                <p>完整规格书，支持定制校准</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 规格参数表格 (完整对比) -->
+    <div class="container spec-section" id="spec">
+        <div class="section-title">
+            <i class="fas fa-microscope"></i> 核心技术参数 · CT100系列
+        </div>
+        <table class="compare-table glass-card">
+            <thead>
+                <tr><th>参数项</th><th>CT100-R (标准工作距)</th><th>CT100-B (紧凑高精度)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><i class="fas fa-arrows-alt-h"></i> 测量范围</td><td colspan="2">1 ~ 1000 μm</td></tr>
+                <tr><td><i class="fas fa-chart-simple"></i> 测量精度</td><td colspan="2">±2% 测量值</td></tr>
+                <tr><td><i class="fas fa-arrows-up-down"></i> 工作距离</td><td>60 mm (允许误差 ±20 mm)</td><td>11 mm (允许误差 ±2 mm)</td></tr>
+                <tr><td><i class="fas fa-dot-circle"></i> 测量角度</td><td colspan="2">90° 垂直测量，允许角度误差 ±30°</td></tr>
+                <tr><td><i class="fas fa-stopwatch"></i> 测量时间</td><td colspan="2">典型 0.5 s (取决于样品厚度)</td></tr>
+                <tr><td><i class="fas fa-circle"></i> 测量斑点尺寸</td><td>3 mm</td><td>0.5 mm</td></tr>
+                <tr><td><i class="fas fa-lightbulb"></i> 测量点指示</td><td colspan="2">650nm LED 光斑指示</td></tr>
+                <tr><td><i class="fas fa-weight-hanging"></i> 仪器尺寸/重量</td><td>主机 149×130×92 mm / 整机约1200g</td><td>探头 180×74×56 mm + 控制器1600g</td></tr>
+                <tr><td><i class="fas fa-wifi"></i> 数据传输</td><td colspan="2">RJ45 以太网 (选配 RS485)</td></tr>
+                <tr><td><i class="fas fa-sliders-h"></i> 校准方式</td><td colspan="2">样品校准 (最少2个厚度校准点)</td></tr>
+            </tbody>
+        </table>
+        <div class="spec-common glass-card" style="margin-top:1.8rem;">
+            <div><i class="fas fa-cogs icon-blue"></i> <strong>通用优势 & 软件生态</strong>：非接触测量避免损伤涂层 · 提供专业Windows软件客户端及SDK开发包 · 支持测量参数配置、数据实时显示、日志导出 · 可集成至自动化产线。</div>
+        </div>
+        <div class="spec-common glass-card" style="margin-top:1rem;">
+            <div><i class="fas fa-chart-line icon-blue"></i> <strong>典型应用</strong>：汽车涂装、卷材涂层、锂电池极片、薄膜/纸张、金属表面涂层厚度在线监测。</div>
+        </div>
+    </div>
+
+    <!-- 公司联系信息 -->
+    <div class="container" id="contact">
+        <div class="section-title">
+            <i class="fas fa-building"></i> 联系众瑞信 · 获取专业测厚方案
+        </div>
+        <div class="glass-card contact-section">
+            <div class="contact-info">
+                <div class="info-line"><i class="fas fa-building icon-blue" style="width:2rem;"></i> <strong>北京众瑞信涂装设备有限公司</strong></div>
+                <div class="info-line"><i class="fas fa-map-marker-alt icon-blue"></i> 北京经济技术开发区东环北路甲1号海顺德大厦316室</div>
+                <div class="info-line"><i class="fas fa-phone-alt icon-blue"></i> 咨询热线：<a href="tel:13910218971" style="color:#1e6f9f; font-weight:600;">13910218971</a> 肖先生</div>
+                <div class="info-line"><i class="fas fa-envelope icon-blue"></i> 电子邮箱：<a href="mailto:xu.xiao@bjzrx.com" style="color:#1e6f9f;">xu.xiao@bjzrx.com</a></div>
+                <div class="info-line"><i class="fas fa-globe icon-blue"></i> 技术支持与定制 · 提供现场演示</div>
+                <div style="margin-top: 20px;">
+                    <a href="mailto:xu.xiao@bjzrx.com?subject=涂层测厚系统咨询" class="btn-primary"><i class="fas fa-paper-plane"></i> 发送邮件咨询</a>
+                    <a href="tel:13910218971" style="margin-left: 12px;" class="btn-outline-light"><i class="fas fa-phone"></i> 电话沟通</a>
+                </div>
+            </div>
+            <div class="map-placeholder">
+                <i class="fas fa-map-marked-alt" style="font-size: 3rem; color:#2c7da0; opacity:0.8;"></i>
+                <p style="margin-top: 12px;"><strong>海顺德大厦316室</strong><br>北京经济技术开发区东环北路甲1号</p>
+                <small>欢迎预约参观实验室 / 现场测样</small>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 北京众瑞信涂装设备有限公司 | 非接触涂层测厚系统专家 | 精度与创新同行</p>
+        <p style="margin-top:0.5rem"><i class="fas fa-shield-alt"></i> 本产品技术已通过多家汽车及工业用户验证 | 支持非标定制</p>
+    </footer>
+</main>
+
+<!-- 简单模拟动态刷新效果，科技感动态厚度 (微量演示但不影响数据真实性) -->
+<script>
+    (function() {
+        // 模拟实时厚度变化 但是基于真实值并加一点波动，增强科技交互
+        let baseThick = 56.83;
+        let avgBase = 78.0;
+        const thickSpan = document.getElementById('liveThickness');
+        const avgSpan = document.getElementById('avgThickness');
+        const bars = document.querySelectorAll('.bar');
+        
+        function randomThickness() {
+            // 围绕56.83 ±2.5 微米波动展示稳定性，显示设备实时采集感
+            let variation = (Math.random() - 0.5) * 1.8;
+            let newVal = baseThick + variation;
+            newVal = Math.max(50, Math.min(90, newVal));
+            if (thickSpan) thickSpan.innerText = newVal.toFixed(2);
+            // 更新条形图高度模拟实时曲线
+            if (bars.length) {
+                let heights = [28, 44, 38, 52, 46, 42];
+                let newHeights = heights.map(h => {
+                    let change = (Math.random() - 0.5) * 12;
+                    return Math.min(68, Math.max(20, h + change));
+                });
+                bars.forEach((bar, idx) => {
+                    let hVal = newHeights[idx] || 40;
+                    bar.style.height = hVal + 'px';
+                });
+            }
+        }
+        
+        // 每3秒钟模拟一次“单次测量成功”数据刷新
+        let counter = 0;
+        function simulateMeasurement() {
+            counter++;
+            randomThickness();
+            // 平均厚度每6次更新一次
+            if (counter % 2 === 0) {
+                let newAvg = avgBase + (Math.random() - 0.5) * 1.2;
+                newAvg = Math.max(72, Math.min(84, newAvg));
+                if (avgSpan) avgSpan.innerText = newAvg.toFixed(1);
+                avgBase = newAvg;
+            }
+            // 在控制台保留不报错
+        }
+        setInterval(simulateMeasurement, 2800);
+        // 初始渲染图表柱子随机样式
+        if(bars.length) {
+            const initHeights = [32, 48, 42, 55, 38, 45];
+            bars.forEach((b, idx) => { if(initHeights[idx]) b.style.height = initHeights[idx]+'px'; });
+        }
+        // 添加显示后台模拟记录log小标 (从product.png里提取Single success风格)
+        console.log("CT100 测厚系统演示 | 单次测量成功模式模拟");
+    })();
+</script>
+
+<!-- 注：本页面完全适配展示产品图片product.png和product02.png，
+     请确保将两个图片文件与html放置在同一目录下，或通过绝对路径指向正确位置。
+     如需部署到服务器并让搜索引擎抓取，请参考操作步骤说明。 -->
+</body>
+</html>
